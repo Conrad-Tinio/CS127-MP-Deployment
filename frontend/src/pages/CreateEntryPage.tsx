@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { entryApi, personApi, groupApi } from '../services/api'
 import type { TransactionType } from '../types'
@@ -17,7 +17,6 @@ import {
 
 export default function CreateEntryPage() {
   const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   const [formData, setFormData] = useState({

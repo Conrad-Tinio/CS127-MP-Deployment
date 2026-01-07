@@ -8,8 +8,7 @@ import {
   Search,
   UserPlus,
   Loader2,
-  X,
-  ChevronRight
+  X
 } from 'lucide-react'
 
 export default function PeopleGroupsPage() {

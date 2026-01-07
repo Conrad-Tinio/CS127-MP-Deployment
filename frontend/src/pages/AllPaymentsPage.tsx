@@ -5,12 +5,10 @@ import type { Entry } from '../types'
 import { format } from 'date-fns'
 import { 
   Plus, 
-  Search, 
-  Filter,
+  Search,
   Calendar,
   User,
   Users,
-  ArrowUpDown,
   FileText
 } from 'lucide-react'
 

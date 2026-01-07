@@ -4,8 +4,7 @@ import {
   FileText, 
   Users, 
   PlusCircle,
-  Wallet,
-  TrendingUp
+  Wallet
 } from 'lucide-react'
 
 interface LayoutProps {

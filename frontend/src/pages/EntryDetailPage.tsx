@@ -12,7 +12,6 @@ import {
   Clock,
   CheckCircle2,
   AlertCircle,
-  FileText,
   Plus,
   Hash,
   Banknote,
