@@ -1,0 +1,32 @@
+# Render Blueprint - Infrastructure as Code
+# This file allows you to deploy with one click from the Render dashboard
+# See: https://render.com/docs/blueprint-spec
+
+services:
+  # Backend Spring Boot API
+  - type: web
+    name: loan-tracking-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    region: singapore  # Change to your preferred region (oregon, frankfurt, singapore, ohio)
+    plan: free
+    healthCheckPath: /api/persons
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: DATABASE_URL
+        sync: false  # You'll set this manually
+      - key: DATABASE_USERNAME
+        sync: false  # You'll set this manually
+      - key: DATABASE_PASSWORD
+        sync: false  # You'll set this manually
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false  # You'll set this after deploying frontend (e.g., https://your-app.vercel.app)
+      - key: SHOW_SQL
+        value: "false"
+      - key: HIKARI_MAX_POOL_SIZE
+        value: "3"
+      - key: HIKARI_MIN_IDLE
+        value: "1"
+
