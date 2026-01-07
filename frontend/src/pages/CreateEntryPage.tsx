@@ -15,11 +15,27 @@ import {
   Info
 } from 'lucide-react'
 
+interface FormData {
+  entryName: string
+  description: string
+  transactionType: TransactionType
+  dateBorrowed: string
+  borrowerName: string
+  borrowerGroupName: string
+  lenderName: string
+  amountBorrowed: string
+  notes: string
+  paymentNotes: string
+  installmentStartDate: string
+  paymentFrequency: string
+  paymentTerms: string
+}
+
 export default function CreateEntryPage() {
   const navigate = useNavigate()
   const [submitting, setSubmitting] = useState(false)
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     entryName: '',
     description: '',
     transactionType: TransactionType.STRAIGHT_EXPENSE,
