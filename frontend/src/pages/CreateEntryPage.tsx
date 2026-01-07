@@ -178,7 +178,7 @@ export default function CreateEntryPage() {
     }
   }
 
-  const getTransactionTypeDescription = (type: TransactionType) => {
+  const getTransactionTypeDescription = (type: 'STRAIGHT_EXPENSE' | 'INSTALLMENT_EXPENSE' | 'GROUP_EXPENSE') => {
     switch (type) {
       case 'STRAIGHT_EXPENSE':
         return 'A simple one-time loan or expense between two people.'
@@ -308,7 +308,7 @@ export default function CreateEntryPage() {
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
                 <input
                   type="text"
-                  required={formData.transactionType !== 'GROUP_EXPENSE'}
+                  required
                   value={formData.borrowerName}
                   onChange={(e) => setFormData({ ...formData, borrowerName: e.target.value, borrowerGroupName: '' })}
                   placeholder="Enter borrower's full name"
