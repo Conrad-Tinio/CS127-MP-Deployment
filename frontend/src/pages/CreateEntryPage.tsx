@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { entryApi, personApi, groupApi } from '../services/api'
-import { TransactionType } from '../types'
 import { 
   ArrowLeft, 
   Save, 
@@ -18,7 +17,7 @@ import {
 interface FormData {
   entryName: string
   description: string
-  transactionType: TransactionType
+  transactionType: 'STRAIGHT_EXPENSE' | 'INSTALLMENT_EXPENSE' | 'GROUP_EXPENSE'
   dateBorrowed: string
   borrowerName: string
   borrowerGroupName: string
@@ -38,7 +37,7 @@ export default function CreateEntryPage() {
   const [formData, setFormData] = useState<FormData>({
     entryName: '',
     description: '',
-    transactionType: TransactionType.STRAIGHT_EXPENSE,
+    transactionType: 'STRAIGHT_EXPENSE',
     dateBorrowed: '',
     borrowerName: '',
     borrowerGroupName: '',
@@ -104,13 +103,13 @@ export default function CreateEntryPage() {
         return
       }
 
-      if (formData.transactionType !== TransactionType.GROUP_EXPENSE && !formData.borrowerName.trim()) {
+      if (formData.transactionType !== 'GROUP_EXPENSE' && !formData.borrowerName.trim()) {
         alert('Borrower name is required')
         setSubmitting(false)
         return
       }
 
-      if (formData.transactionType === TransactionType.GROUP_EXPENSE && !formData.borrowerGroupName.trim()) {
+      if (formData.transactionType === 'GROUP_EXPENSE' && !formData.borrowerGroupName.trim()) {
         alert('Group name is required')
         setSubmitting(false)
         return
@@ -121,7 +120,7 @@ export default function CreateEntryPage() {
       let borrowerPersonId: string | undefined = undefined
       let borrowerGroupId: string | undefined = undefined
       
-      if (formData.transactionType !== TransactionType.GROUP_EXPENSE) {
+      if (formData.transactionType !== 'GROUP_EXPENSE') {
         borrowerPersonId = await findOrCreatePerson(formData.borrowerName)
       } else {
         borrowerGroupId = await findOrCreateGroup(formData.borrowerGroupName)
@@ -153,7 +152,7 @@ export default function CreateEntryPage() {
         request.paymentNotes = formData.paymentNotes.trim()
       }
 
-      if (formData.transactionType === TransactionType.INSTALLMENT_EXPENSE) {
+      if (formData.transactionType === 'INSTALLMENT_EXPENSE') {
         if (formData.installmentStartDate) {
           request.installmentStartDate = formData.installmentStartDate
         }
@@ -181,11 +180,11 @@ export default function CreateEntryPage() {
 
   const getTransactionTypeDescription = (type: TransactionType) => {
     switch (type) {
-      case TransactionType.STRAIGHT_EXPENSE:
+      case 'STRAIGHT_EXPENSE':
         return 'A simple one-time loan or expense between two people.'
-      case TransactionType.INSTALLMENT_EXPENSE:
+      case 'INSTALLMENT_EXPENSE':
         return 'A loan paid back in multiple scheduled payments.'
-      case TransactionType.GROUP_EXPENSE:
+      case 'GROUP_EXPENSE':
         return 'A shared expense split among group members.'
     }
   }
@@ -244,7 +243,7 @@ export default function CreateEntryPage() {
           <div>
             <label className="label">Transaction Type *</label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              {([TransactionType.STRAIGHT_EXPENSE, TransactionType.INSTALLMENT_EXPENSE, TransactionType.GROUP_EXPENSE]).map((type) => (
+              {(['STRAIGHT_EXPENSE', 'INSTALLMENT_EXPENSE', 'GROUP_EXPENSE'] as const).map((type) => (
                 <button
                   key={type}
                   type="button"
@@ -256,9 +255,9 @@ export default function CreateEntryPage() {
                   }`}
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    {type === TransactionType.GROUP_EXPENSE ? (
+                    {type === 'GROUP_EXPENSE' ? (
                       <Users className={`w-5 h-5 ${formData.transactionType === type ? 'text-primary-400' : 'text-dark-400'}`} />
-                    ) : type === TransactionType.INSTALLMENT_EXPENSE ? (
+                    ) : type === 'INSTALLMENT_EXPENSE' ? (
                       <Clock className={`w-5 h-5 ${formData.transactionType === type ? 'text-primary-400' : 'text-dark-400'}`} />
                     ) : (
                       <DollarSign className={`w-5 h-5 ${formData.transactionType === type ? 'text-primary-400' : 'text-dark-400'}`} />
@@ -302,14 +301,14 @@ export default function CreateEntryPage() {
             </div>
           </div>
 
-          {formData.transactionType !== TransactionType.GROUP_EXPENSE ? (
+          {formData.transactionType !== 'GROUP_EXPENSE' ? (
             <div>
               <label className="label">Borrower (Person) *</label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-dark-500" />
                 <input
                   type="text"
-                  required={formData.transactionType !== TransactionType.GROUP_EXPENSE}
+                  required={formData.transactionType !== 'GROUP_EXPENSE'}
                   value={formData.borrowerName}
                   onChange={(e) => setFormData({ ...formData, borrowerName: e.target.value, borrowerGroupName: '' })}
                   placeholder="Enter borrower's full name"
@@ -384,7 +383,7 @@ export default function CreateEntryPage() {
         </div>
 
         {/* Installment Options */}
-        {formData.transactionType === TransactionType.INSTALLMENT_EXPENSE && (
+        {formData.transactionType === 'INSTALLMENT_EXPENSE' && (
           <div className="glass-card p-6 space-y-6">
             <div className="flex items-center gap-3 pb-4 border-b border-dark-800">
               <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
